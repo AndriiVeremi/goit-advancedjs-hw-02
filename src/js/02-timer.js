@@ -5,6 +5,10 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 const refs = {
   startBtn: document.querySelector('button[data-start]'),
+  days: document.querySelector('[data-days]'),
+  hours: document.querySelector('[data-hours]'),
+  minutes: document.querySelector('[data-minutes]'),
+  seconds: document.querySelector('[data-seconds]'),
 };
 
 refs.startBtn.disabled = true;
@@ -19,7 +23,6 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
       console.log(selectedDates[0]);
-      
 
     if (selectedDates[0] <= new Date()) {
       iziToast.show({
@@ -36,9 +39,10 @@ const options = {
 
 flatpickr('input#datetime-picker', options);
 
-
 function onStartEvent() {
-console.log(selectedNewDates);
+    const currentDate = new Date().getTime();
+    const eventDate = selectedNewDates - currentDate
+    startPromoTimer(convertMs(eventDate));
 }
 
 function convertMs(ms) {
@@ -60,6 +64,9 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+function startPromoTimer({ days, hours, minutes, seconds }) {
+    refs.days.textContent = days;
+    refs.hours.textContent = hours;
+    refs.minutes.textContent = minutes;
+    refs.seconds.textContent = seconds;
+}
