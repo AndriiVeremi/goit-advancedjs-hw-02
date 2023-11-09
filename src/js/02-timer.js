@@ -40,9 +40,21 @@ const options = {
 flatpickr('input#datetime-picker', options);
 
 function onStartEvent() {
-    const currentDate = new Date().getTime();
-    const eventDate = selectedNewDates - currentDate
-    startPromoTimer(convertMs(eventDate));
+    const timer = setInterval(() => {
+        const currentDate = new Date().getTime();
+        const eventDate = selectedNewDates - currentDate;
+        startPromoTimer(convertMs(eventDate));
+        refs.startBtn.disabled = true;
+        
+        if (selectedNewDates - currentDate < 1000) {
+          clearInterval(intervalId);
+           iziToast.show({
+             position: 'center',
+             message: 'Event in the End',
+           });
+          refs.startBtn.disabled = false;
+        }
+    }, 1000)
 }
 
 function convertMs(ms) {
@@ -53,13 +65,15 @@ function convertMs(ms) {
   const day = hour * 24;
 
   // Remaining days
-  const days = Math.floor(ms / day);
+  const days = addLeadingZero(Math.floor(ms / day));
   // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
   // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
   // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const seconds = addLeadingZero(Math.floor(
+    (((ms % day) % hour) % minute) / second
+  ));
 
   return { days, hours, minutes, seconds };
 }
@@ -70,3 +84,7 @@ function startPromoTimer({ days, hours, minutes, seconds }) {
     refs.minutes.textContent = minutes;
     refs.seconds.textContent = seconds;
 }
+
+function addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+};
