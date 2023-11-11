@@ -4,6 +4,7 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const refs = {
+  input: document.querySelector('#datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
   days: document.querySelector('[data-days]'),
   hours: document.querySelector('[data-hours]'),
@@ -32,7 +33,8 @@ const options = {
       });
     } else {
         selectedNewDates = selectedDates[0].getTime();
-        refs.startBtn.disabled = false;
+      refs.startBtn.disabled = false;
+      refs.input.disabled = false;
       }
   },
 };
@@ -44,15 +46,17 @@ function onStartEvent() {
         const currentDate = new Date().getTime();
         const eventDate = selectedNewDates - currentDate;
         startPromoTimer(convertMs(eventDate));
-        refs.startBtn.disabled = true;
+      refs.startBtn.disabled = true;
+      refs.input.disabled = true;
         
         if (selectedNewDates - currentDate < 1000) {
-          clearInterval(intervalId);
+          clearInterval(timer);
            iziToast.show({
              position: 'center',
              message: 'Event in the End',
            });
           refs.startBtn.disabled = false;
+          refs.input.disabled = false;
         }
     }, 1000)
 }

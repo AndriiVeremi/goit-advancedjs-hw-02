@@ -7,6 +7,7 @@ const refs = {
 refs.start.addEventListener('click', onStartColor);
 refs.stop.addEventListener('click', onStopColor);
 refs.start.disabled = false;
+refs.stop.disabled = true;
 let startColor;
 
 function onStartColor() {
@@ -14,11 +15,13 @@ function onStartColor() {
     refs.body.style.backgroundColor = getRandomHexColor();
   }, 1000);
   refs.start.disabled = true;
+  refs.stop.disabled = false;
 }
 
 function onStopColor() {
   clearInterval(startColor);
   refs.start.disabled = false;
+  refs.stop.disabled = true;
 }
 
 function getRandomHexColor() {

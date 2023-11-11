@@ -14,7 +14,7 @@ refs.submitBtn.addEventListener('click', onFormSubmit);
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
-    setInterval(() => {
+    setTimeout(() => {
       if (shouldResolve) {
         resolve({ position, delay })
       } else {
@@ -30,7 +30,7 @@ function onFormSubmit(event) {
   let newDelay = +refs.delay.value;
   let amount = +refs.amount.value;
   let step = +refs.step.value;
-  
+
   for (let i = 1; i <= amount; i += 1) {
     createPromise(i, newDelay)
       .then(({ position, delay }) => {
@@ -44,7 +44,8 @@ function onFormSubmit(event) {
           position: 'topRight',
           message: `❌ Rejected promise ${position} in ${delay}ms`,
         });
-      });   
-    newDelay = newDelay + step;
-  };
+      });
+    newDelay += step;
+  }
+  refs.form.reset();
 };
